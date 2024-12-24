@@ -9,17 +9,8 @@ import SubmitButton from "../SubmitButton";
 import { useState } from "react";
 import { userFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-
-export enum FormInputType {
-  INPUT = "input",
-  CHECKBOX = "checkbox",
-  RADIO = "radio",
-  TEXTAREA = "textarea",
-  SELECT = "select",
-  DATEPICKER = "datepicker",
-  PHONE = "phone",
-  SKELETON = "skeleton",
-}
+import { createUser } from "@/lib/actions/patient.action";
+import { FormInputType } from "@/types/enums";
 
 const PatientForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,9 +30,8 @@ const PatientForm = () => {
   const onSubmit = async (values: z.infer<typeof userFormValidation>) => {
     setIsLoading(true);
     try {
-      // TODO: create user
-      // const user = await createUser(name, email, phone);
-      // if (user)  router.push(`/patients/${user.id}/register`);
+      const user = await createUser(values);
+      if (user) router.push(`/patients/${user.id}/register`);
 
     } catch (error) {
       console.error(error);
