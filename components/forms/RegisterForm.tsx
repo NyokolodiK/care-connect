@@ -81,6 +81,8 @@ const RegisterForm = ({ user }: { user: User }) => {
         identificationNumber,
         identificationDocument,
         privacyConsent,
+        treatmentConsent,
+        disclosureConsent
       } = values;
 
       const patient = {
@@ -105,6 +107,8 @@ const RegisterForm = ({ user }: { user: User }) => {
         identificationNumber,
         identificationDocument: identificationDocument ? formData : undefined,
         privacyConsent,
+        treatmentConsent,
+        disclosureConsent
       };
 
       const newPatient = await registerPatient(patient);

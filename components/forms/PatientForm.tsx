@@ -31,7 +31,7 @@ const PatientForm = () => {
     setIsLoading(true);
     try {
       const user = await createUser(values);
-      if (user) router.push(`/patients/${user.id}/register`);
+      if (user) router.push(`/patients/${user.$id}/register`);
 
     } catch (error) {
       console.error(error);

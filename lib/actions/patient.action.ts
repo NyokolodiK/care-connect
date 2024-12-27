@@ -14,32 +14,31 @@ import {
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
 
-/*************  ✨ Codeium Command ⭐  *************/
-/**
- * Creates a new user.
- *
- * @param {CreateUserParams} createUserParams The params to create a new user.
- * @returns {Promise<User>} The created user, or an existing user if one with the same email already exists.
- * @example
- * const user = await createUser({ name: "John Doe", email: "john@example.com", phone: "+1234567890" });
- * console.log(user);
- */
-/******  9d14a787-debf-48fb-93fb-5925d2da1061  *******/
-export const createUser = async ({ name, email, phone }: CreateUserParams) => {
+// CREATE APPWRITE USER
+export const createUser = async (user: CreateUserParams) => {
   try {
-    const user = await users.create(ID.unique(), email, phone, undefined, name);
-    return parseStringify(user);
-  } catch (error: any) {
-    if (error && error?.code === 409) {
-      const documents = await users.list([Query.equal("email", [email])]);
+    // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
+    const newuser = await users.create(
+      ID.unique(),
+      user.email,
+      user.phone,
+      undefined,
+      user.name
+    );
 
-      return documents?.users[0];
-    } else {
-      throw error;
+    return parseStringify(newuser);
+  } catch (error: any) {
+    // Check existing user
+    if (error && error?.code === 409) {
+      const existingUser = await users.list([
+        Query.equal("email", [user.email]),
+      ]);
+
+      return existingUser.users[0];
     }
+    console.error("An error occurred while creating a new user:", error);
   }
 };
-
 export const getUser = async (userId: string) => {
   try {
     const user = await users.get(userId);
